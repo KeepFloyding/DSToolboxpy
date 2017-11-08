@@ -15,6 +15,7 @@ Outputs:
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 """
 A function that takes a timeseries dataframe and subdivides into event_legs. The 
