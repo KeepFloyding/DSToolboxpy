@@ -16,6 +16,12 @@ Outputs:
 import pandas as pd
 import numpy as np
 
+"""
+A function that takes a timeseries dataframe and subdivides into event_legs. The 
+returned dataframe contains an index grouped by the event_leg and columns that correspond to
+the unique elements in the other column.
+"""
+
 def prepare_df(df,start_date, dt, date_feature, group_array):
 
     df[date_feature] = pd.to_datetime(df[date_feature])
@@ -32,14 +38,14 @@ def prepare_df(df,start_date, dt, date_feature, group_array):
     return df_grp
 
 """
-A function that prepares our time series dataframe in one of 2 manners:
+A function that prepares a time series dataframe in one of 2 manners:
     - sum (for every month of desired data, simply sum the values)
     - append (for every month of desired data, add columns showing activity during that month)
     
 Returns a churn dataframe that corresponds to when each user churned
 """
 
-def prepare_time_series_2(df, month_array, type_operation, groupby_feature = 'user_id'):
+def prepare_time_series(df, month_array, type_operation, groupby_feature = 'user_id'):
     
     # If we want to append each month as a seperate feature 
     if type_operation == 'append':
@@ -65,50 +71,6 @@ def prepare_time_series_2(df, month_array, type_operation, groupby_feature = 'us
 
     return df_new
     
-
-def prepare_time_series(df_test, month_array, type_operation):
-    
-    keys = np.unique(df_test.index.get_level_values(0))
-    var = [];
-    new_keys = [];
-    churn = [];
-
-    for key in keys:
-        try:
-            # Loading first month data
-            user_var = df_test.loc[key].loc[month_array[0]]
-
-            # Loading data from the other months if required
-            if len(month_array) > 1:
-                
-                for it in range(1,len(month_array)):
-                    
-                    if type_operation == 'sum':
-                        
-                        try:
-                            user_var = user_var + df_test.loc[key].loc[month_array[it]]
-                        except:
-                            continue
-                        
-                    elif type_operation == 'append':
-                        try:
-                            user_var_2 = df_test.loc[key].loc[month_array[it]]
-                        except:
-                            user_var_2 = df_test.iloc[0]*0
-                
-                        user_var_2 = user_var_2.rename(lambda x: x + '_'+str(month_array[it]))
-                        user_var = user_var.append(user_var_2)
-
-            example_key = df_test.iloc[0].keys()[0];
-            churn.append(max(df_test.loc[key][example_key].keys().values))
-            var.append(user_var);
-            new_keys.append(key)
-        except:
-            continue
-            
-    df_new = pd.DataFrame(var, index = new_keys)
-    churn = pd.DataFrame(churn, index = new_keys, columns = ['event_leg'])
-    return df_new, churn
 
 """
 General function to test any classifier
