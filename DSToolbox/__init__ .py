@@ -1,4 +1,6 @@
-# Here is a useful function to organise the dataframes how we want them. You can ignore it if you want:
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 """
 Function to prepare timeseries dataframe. Divides timeseries data into event_legs and groups by group_array
@@ -11,16 +13,6 @@ Inputs:
 
 Outputs:
     - df_grp: dataframe where timeseries has been grouped into event_legs
-"""
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-
-"""
-A function that takes a timeseries dataframe and subdivides into event_legs. The 
-returned dataframe contains an index grouped by the event_leg and columns that correspond to
-the unique elements in the other column.
 """
 
 def prepare_df(df,start_date, dt, date_feature, group_array):
