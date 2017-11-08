@@ -4,12 +4,12 @@ with open('requirements.txt') as f:
     requirements = [r.rstrip('\n') for r in f.readlines()]
 
 setup(
-    name='ASI_IP_library',
+    name='DSToolbox',
     version='0.0.1',
-    description='Python library for ASI and IP',
+    description='Datascience toolbox',
     url='https://www.asidatascience.com',
-    author='ASI Data Science',
-    author_email='andris.p@asidatascience.com',
+    author='Andris Piebalgs',
+    author_email='andris.piebalgs@outlook.com',
     packages=find_packages(),
     install_requires=requirements
 )
