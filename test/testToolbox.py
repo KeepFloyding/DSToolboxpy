@@ -1,9 +1,10 @@
 from DSToolbox import *
+import pandas as pd
 
 # ---------------------------------------
 # Read the sample data
 # ---------------------------------------
-df = pd.read_csv('sample_data.csv')
+df = pd.read_csv('sample-data.csv')
 
 # ---------------------------------------
 # Group dataframe into event legs
@@ -17,7 +18,7 @@ group_array = ['user_id','event_leg','event_type']
 df_grp = prepare_df(df,start_date, dt, date_feature, group_array)
 
 # Save the csv for inspection
-df_grp.csv('sample_grouped.csv')
+df_grp.csv('sample-grouped.csv')
 
 # ---------------------------------------
 # Assign event legs 0,1,2 as seperate features
@@ -28,17 +29,5 @@ type_operation = 'append' # other option is to sum
 df_new = prepare_time_series(df_grp, month_array, type_operation)
 
 # Save the csv for inspection
-df_new.csv('sample_appended.csv')
+df_new.csv('sample-appended.csv')
 
-# ---------------------------------------
-# Train and test the model with a Random Forest algorithm
-# ---------------------------------------
-
-
-from sklearn.ensemble import RandomForestClassifier as RF 
-
-n_fold = 5
-df_score, y_check, clf = test_classifier(X,y,RF,n_fold,n_estimators = 100)
-
-# Save the scores
-df_score.csv('score_df.csv')
