@@ -169,3 +169,61 @@ def return_feature_importance(X,y,keys,n_estimators = 100):
     for f in range(X.shape[1]):
         print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]),keys[indices[f]])
     
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# Function for univariate linear regression
+# Inputs
+# df: dataframe of values
+# x_array: key names for dataframe
+# y_array: key names for dataframe
+# Outputs
+# df_out: dataframe of key results
+# fig: multiple subplots 
+
+def checkLinearFit(df,x_array,y_array,figsize=(10,10),n_cols=2,n_rows=2,alpha=0.2):
+    
+    # Creating storage arrays
+    x_choose = []
+    y_choose = []
+    coef_array = [];
+    intercept_array = [];
+    R_array = []
+    
+    plt.subplots(n_rows,n_cols,figsize=figsize)
+    
+    # Cycling through each dependent variable
+    count = 1;
+    for item_x in x_array:
+        for item_y in y_array:
+            
+            if item_y != item_x:
+
+                # Grabbing X and Y values
+                X = df[item_x].values.reshape(-1,1)
+                Y = df[item_y].values.reshape(-1,1)
+
+                # Training the model
+                clf = LinearRegression()
+                clf.fit(X,Y)
+                Y_pred = clf.predict(X)
+
+                # Storing important values in a dataframe
+                x_choose.append(item_x)
+                y_choose.append(item_y)
+                coef_array.append(clf.coef_[0][0])
+                intercept_array.append(clf.intercept_[0])
+                R_array.append(r2_score(Y, Y_pred))
+
+                # Plotting results
+                plt.subplot(n_rows,n_cols,count)
+                plt.scatter(X,Y,alpha=alpha)
+                plt.xlabel(item_x)
+                plt.ylabel(item_y)
+                plt.plot(X,Y_pred)
+                count += 1
+
+    # Storing results in a dataframe
+    df_out = pd.DataFrame({'X':x_choose,'Y':y_choose,'Coef':coef_array,'intercept':intercept_array,'R^2':R_array})
+    
+    return df_out,fig
