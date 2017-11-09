@@ -32,7 +32,29 @@ import DSToolbox
 
 A sample dataset has been provided that contains user_ids, clickstream actions, dates of the events and their registration date. Running testToolbox.py will import the dataset, manipulate it and save it as csvs after running each function. 
 
-First the users and their actions in the dataset will be grouped by discretised event legs. Then the data will be manipulated again to assig the actions in each event_leg as seperate features. 
+```
+python testToolbox.py
+```
+
+First the users and their actions in the dataset will be grouped by discretised event legs. 
+
+```
+dt = 60*60*24*30 # Each event leg represents 30 days
+start_date = 'registration_date'
+date_feature = 'date_of_event'
+group_array = ['user_id','event_leg','event_type']
+
+df_grp = prepare_df(df,start_date, dt, date_feature, group_array)
+
+```
+
+Then the data will be manipulated again to assig the actions in each event_leg as seperate features. 
+
+```
+month_array = [0,1,2]
+type_operation = 'append' # other option is to sum
+df_new = prepare_time_series(df_grp, month_array, type_operation)
+```
 
 This can then be used with the testClassifier function to test a machine learning algorithm on that dataset. 
 
