@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='DSToolbox',
-    version='0.0.1',
+    version='0.0.2',
     description='Datascience toolbox',
     url='https://www.asidatascience.com',
     author='Andris Piebalgs',
